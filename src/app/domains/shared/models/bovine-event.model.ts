@@ -1,14 +1,14 @@
 // bovine-event.model.ts
 export interface BovineEvent {
-  eventId: number;
-  bovineId: number;
-  eventDate: string; // ISO datetime
-  eventCategory: 'Health' | 'Reproduction';
-  eventType: string;
+  event_id: number;
+  bovine_id: number;
+  event_date: string; // ISO datetime
+  event_category: 'Health' | 'Reproduction';
+  event_type: string;
   severity?: 'Mild' | 'Moderate' | 'Severe';
   result?: 'Positive' | 'Negative' | 'Unknown';
-  lactationAffected: boolean;
+  lactation_affected: boolean;
   notes?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  created_at?: string;
+  updated_at?: string;
 }

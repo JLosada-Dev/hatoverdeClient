@@ -12,6 +12,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./domains/bovine/pages/list-bovine/list-bovine.component'),
       },
+      {
+        path: 'bovine/:id',
+        loadComponent: () =>
+          import(
+            './domains/bovine/pages/bovine-detail/bovine-detail.component'
+          ),
+      },
     ],
   },
   {

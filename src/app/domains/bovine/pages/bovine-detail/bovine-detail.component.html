@@ -1,0 +1,106 @@
+<!-- bovine-detail.component.html -->
+<section class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-16 py-8 space-y-12">
+  <!-- 1) Información general del bovino (dinámica) -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+    <!-- Imagen dinámica con fallback -->
+    <div class="flex justify-center md:justify-start">
+      <img
+        src="img/bovine-placeholder.jpg"
+        alt="Foto del bovino placeholder"
+        class="w-48 h-48 object-cover rounded-2xl shadow-sm"
+      />
+    </div>
+
+    <!-- Datos -->
+    <div class="md:col-span-2 space-y-2">
+      <h2 class="text-sm font-medium text-gray-500 uppercase tracking-wide">
+        {{ bovine()?.breed }}
+      </h2>
+      <h1 class="text-3xl font-extrabold text-gray-900">
+        {{ bovine()?.ear_tag }}
+      </h1>
+      <p class="text-gray-700">
+        Peso: <span class="font-medium">{{ bovine()?.weight_kg }} kg</span>
+        &nbsp;|&nbsp; Sexo:
+        <span class="font-medium">
+          {{ bovine()?.sex === "Male" ? "Macho" : "Hembra" }}
+        </span>
+      </p>
+      <p class="text-gray-700">
+        Nacido:
+        <span class="font-medium">{{
+          bovine()?.date_of_birth | date: "longDate"
+        }}</span>
+        &nbsp;|&nbsp; Lactancia:
+        <span class="font-medium">Etapa {{ bovine()?.lactation_stage }}</span>
+      </p>
+      <p>
+        <span
+          class="inline-block px-3 py-1 rounded-full text-sm font-medium"
+          [ngClass]="
+            bovine()?.is_active
+              ? 'bg-green-100 text-green-700'
+              : 'bg-red-100 text-red-700'
+          "
+        >
+          {{ bovine()?.is_active ? "Activo" : "Inactivo" }}
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <!-- 2) Producción diaria (esqueleto) -->
+  <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <h3 class="text-lg font-medium text-gray-800">Producción Diaria</h3>
+    </div>
+    <div class="px-6 py-4 overflow-x-auto">
+      <table class="min-w-full text-left text-sm">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 font-semibold text-gray-700">Hora</th>
+            <th class="px-4 py-2 font-semibold text-gray-700">Litros</th>
+            <th class="px-4 py-2 font-semibold text-gray-700">Grasa (%)</th>
+            <th class="px-4 py-2 font-semibold text-gray-700">Proteína (%)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <!-- TODO: reemplazar con *ngFor="let prod of bovine.productions" -->
+          <tr>
+            <td class="px-4 py-2 text-gray-600">--:--</td>
+            <td class="px-4 py-2 text-gray-600">0.0</td>
+            <td class="px-4 py-2 text-gray-600">–</td>
+            <td class="px-4 py-2 text-gray-600">–</td>
+          </tr>
+          <!-- /TODO -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3) Eventos registrados (esqueleto) -->
+  <div class="bg-white rounded-2xl shadow-sm">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <h3 class="text-lg font-medium text-gray-800">Eventos Registrados</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <!-- TODO: reemplazar con *ngFor="let ev of bovine.events" -->
+      <div
+        class="p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition"
+      >
+        <div class="flex justify-between text-sm text-gray-700 font-medium">
+          <span>Categoría</span>
+          <span>DD/MM/AAAA</span>
+        </div>
+        <p class="mt-2 text-gray-600">
+          <strong>Tipo:</strong> – <strong>Severidad:</strong> –
+        </p>
+        <p class="mt-1 text-gray-600"><strong>Notas:</strong> –</p>
+      </div>
+      <!-- /TODO -->
+
+      <!-- Fallback cuando no hay eventos -->
+      <p class="text-center text-gray-500">No hay eventos registrados.</p>
+    </div>
+  </div>
+</section>

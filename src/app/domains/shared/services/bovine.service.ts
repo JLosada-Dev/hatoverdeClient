@@ -13,4 +13,7 @@ export class BovineService {
   getAllBovines() {
     return this.http.get<Bovine[]>(`${environment.apiUrl}/bovines`);
   }
+  getBovineById(id: string) {
+    return this.http.get<Bovine>(`${environment.apiUrl}/bovines/${id}`);
+  }
 }
