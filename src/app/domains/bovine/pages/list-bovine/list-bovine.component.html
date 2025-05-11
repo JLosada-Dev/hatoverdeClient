@@ -1,1 +1,77 @@
-<p>list-bovine works!</p>
+<!-- list-bovine.component.html -->
+<section
+  aria-labelledby="bovines-section-title"
+  class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-16 py-8 space-y-8"
+>
+  <h2 id="bovines-section-title" class="sr-only">Listado de bovinos</h2>
+
+  <!-- Búsqueda + botón -->
+  <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex-1">
+      <label for="search-bovine" class="sr-only">Buscar bovinos</label>
+      <input
+        id="search-bovine"
+        type="search"
+        placeholder="Buscar bovinos…"
+        class="w-full max-w-lg border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200"
+      />
+    </div>
+    <button
+      type="button"
+      class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-500 focus:ring-2 focus:ring-green-400 transition-all duration-200 shadow-sm"
+    >
+      + Bovino
+    </button>
+  </div>
+
+  <!-- Categorías -->
+  <details class="lg:hidden">
+    <summary
+      class="px-4 py-2 bg-gray-200 rounded-lg cursor-pointer font-medium focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-150"
+    >
+      Razas
+    </summary>
+    <ul class="mt-2 space-y-1 bg-white rounded-lg shadow-inner p-2">
+      <li>
+        <a href="#" class="block px-3 py-1 rounded hover:bg-gray-100">Todas</a>
+      </li>
+      <li>
+        <a href="#" class="block px-3 py-1 rounded hover:bg-gray-100"
+          >Holstein</a
+        >
+      </li>
+      <li>
+        <a href="#" class="block px-3 py-1 rounded hover:bg-gray-100"
+          >Ayrshire</a
+        >
+      </li>
+      <li>
+        <a href="#" class="block px-3 py-1 rounded hover:bg-gray-100">Jersey</a>
+      </li>
+    </ul>
+  </details>
+  <nav class="hidden lg:flex space-x-6">
+    <a
+      href="#"
+      class="px-3 py-1 rounded-full bg-green-100 text-green-600 font-semibold"
+      >Todas</a
+    >
+    <a href="#" class="px-3 py-1 rounded-full hover:bg-gray-100">Holstein</a>
+    <a href="#" class="px-3 py-1 rounded-full hover:bg-gray-100">Ayrshire</a>
+    <a href="#" class="px-3 py-1 rounded-full hover:bg-gray-100">Jersey</a>
+  </nav>
+
+  <!-- Grid de bovinos con más espacio -->
+  <div
+    role="list"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center"
+  >
+    @for (bovine of bovines(); track bovine.bovine_id) {
+      <app-bovine
+        role="listitem"
+        class="col-span-1"
+        [bovine]="bovine"
+      ></app-bovine>
+    }
+  </div>
+</section>

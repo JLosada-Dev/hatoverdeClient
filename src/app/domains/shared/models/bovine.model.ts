@@ -3,16 +3,16 @@ import { BovineEvent } from './bovine-event.model';
 import { MilkPrediction } from './milk-prediction.model';
 
 export interface Bovine {
-  bovineId: number;
-  earTag: string;
+  bovine_id: number;
+  ear_tag: string;
   breed: 'Holstein' | 'Ayrshire' | 'Jersey';
-  dateOfBirth: string; // ISO date, e.g. "2025-05-10"
-  weightKg: number;
+  date_of_birth: string; // ISO date, e.g. "2025-05-10"
+  weight_kg: number;
   sex: 'Male' | 'Female';
-  lactationStage: number; // 1–5
-  isActive: boolean;
-  createdAt?: string;
-  updatedAt?: string;
+  lactation_stage: number; // 1–5
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
   productions?: MilkProduction[];
   events?: BovineEvent[];
   predictions?: MilkPrediction[];

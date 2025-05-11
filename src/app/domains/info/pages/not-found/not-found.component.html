@@ -1,27 +1,29 @@
 <section
-  class="bg-gray-100 h-screen w-screen flex items-center justify-center p-10"
+  class="bg-gray-100 min-h-screen flex items-center justify-center px-6 sm:px-8 lg:px-16"
 >
-  <div class="py-8 px-6 mx-auto bg-white shadow-lg rounded-lg">
-    <div class="mx-auto max-w-screen-sm text-center">
-      <h1
-        class="mb-6 text-8xl tracking-tight font-extrabold text-gray-700 lg:text-9xl"
-      >
-        404
-      </h1>
-      <p
-        class="mb-4 text-2xl tracking-tight font-semibold text-gray-800 md:text-3xl"
-      >
-        Oops! Page not found.
+  <div
+    class="max-w-md w-full bg-white/90 backdrop-blur-sm shadow-sm rounded-2xl p-8"
+  >
+    <div class="text-center space-y-6">
+      <!-- Código de estado -->
+      <h1 class="text-9xl font-extrabold text-gray-800">404</h1>
+
+      <!-- Mensaje principal -->
+      <p class="text-2xl font-semibold text-gray-800">
+        ¡Ups! Página no encontrada.
       </p>
-      <p class="mb-6 text-lg font-light text-gray-600">
-        The page you're looking for doesn't exist or has been moved. Let's get
-        you back on track.
+
+      <!-- Descripción -->
+      <p class="text-base text-gray-600">
+        La página que buscas no existe o ha sido movida. Volvamos al inicio.
       </p>
+
+      <!-- Botón -->
       <a
         routerLink="/"
-        class="inline-flex items-center bg-blue-500 text-white hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-6 py-3 transition-all duration-300"
+        class="inline-block bg-green-600 text-white font-medium rounded-lg px-6 py-3 hover:bg-green-700 focus:ring-4 focus:ring-green-300 focus:outline-none transition-transform duration-200 transform hover:scale-105"
       >
-        Back to Homepage
+        Volver al inicio
       </a>
     </div>
   </div>
