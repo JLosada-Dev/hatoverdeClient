@@ -72,7 +72,10 @@ export default class BovineDetailComponent implements OnInit {
       error: (err) => console.error('Error loading events:', err),
     });
   }
-
+  onEditBovine() {
+    console.log('Editar bovino', this.id);
+  }
+  // Aquí abrirías un modal o navegarías a un formulario
   /** Handler para “+ Agregar” */
   onAddProduction() {
     // Aquí abrirías un modal o navegarías a un formulario
