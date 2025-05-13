@@ -1,4 +1,6 @@
+<!-- bovine.component.html -->
 <article
+  *ngIf="bovine"
   class="group max-w-sm md:max-w-md lg:max-w-lg w-full transform hover:scale-105 transition-transform duration-300 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg overflow-hidden"
 >
   <a [routerLink]="['/bovine', bovine.bovine_id]" class="block h-full">
@@ -15,25 +17,32 @@
     <!-- BODY: detalles en grid -->
     <div class="px-6 py-4">
       <dl class="grid grid-cols-2 gap-x-4 gap-y-2">
+        <!-- Raza -->
         <dt class="text-xs font-medium text-gray-500">Raza</dt>
         <dd class="text-sm text-gray-700">{{ bovine.breed }}</dd>
 
+        <!-- Nacimiento -->
         <dt class="text-xs font-medium text-gray-500">Nacimiento</dt>
         <dd class="text-sm text-gray-700">
           {{ bovine.date_of_birth | date: "mediumDate" }}
         </dd>
 
+        <!-- Peso -->
         <dt class="text-xs font-medium text-gray-500">Peso</dt>
         <dd class="text-sm text-gray-700">{{ bovine.weight_kg }} kg</dd>
 
+        <!-- Sexo -->
         <dt class="text-xs font-medium text-gray-500">Sexo</dt>
         <dd class="text-sm text-gray-700">
           {{ bovine.sex === "Male" ? "Macho" : "Hembra" }}
         </dd>
 
+        <!-- Lactancia: siempre visible, pero dash si es macho -->
         <dt class="text-xs font-medium text-gray-500">Lactancia</dt>
         <dd class="text-sm text-gray-700">
-          Etapa {{ bovine.lactation_stage }}
+          {{
+            bovine.sex === "Female" ? "Etapa " + bovine.lactation_stage : "—"
+          }}
         </dd>
       </dl>
     </div>

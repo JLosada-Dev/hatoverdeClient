@@ -1,4 +1,3 @@
-<!-- list-bovine.component.html -->
 <section
   aria-labelledby="bovines-section-title"
   class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-16 py-8 space-y-8"
@@ -12,11 +11,13 @@
       <input
         id="search-bovine"
         type="search"
+        [formControl]="searchControl"
         placeholder="Buscar bovinos…"
         class="w-full max-w-lg border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200"
       />
     </div>
     <button
+      routerLink="/bovines/add"
       type="button"
       class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-500 focus:ring-2 focus:ring-green-400 transition-all duration-200 shadow-sm"
     >
@@ -33,45 +34,85 @@
     </summary>
     <ul class="mt-2 space-y-1 bg-white rounded-lg shadow-inner p-2">
       <li>
-        <a href="#" class="block px-3 py-1 rounded hover:bg-gray-100">Todas</a>
+        <a
+          href="#"
+          (click)="onBreedSelected(null)"
+          class="block px-3 py-1 rounded hover:bg-gray-100"
+          >Todas</a
+        >
       </li>
       <li>
-        <a href="#" class="block px-3 py-1 rounded hover:bg-gray-100"
+        <a
+          href="#"
+          (click)="onBreedSelected('Holstein')"
+          class="block px-3 py-1 rounded hover:bg-gray-100"
           >Holstein</a
         >
       </li>
       <li>
-        <a href="#" class="block px-3 py-1 rounded hover:bg-gray-100"
+        <a
+          href="#"
+          (click)="onBreedSelected('Ayrshire')"
+          class="block px-3 py-1 rounded hover:bg-gray-100"
           >Ayrshire</a
         >
       </li>
       <li>
-        <a href="#" class="block px-3 py-1 rounded hover:bg-gray-100">Jersey</a>
+        <a
+          href="#"
+          (click)="onBreedSelected('Jersey')"
+          class="block px-3 py-1 rounded hover:bg-gray-100"
+          >Jersey</a
+        >
       </li>
     </ul>
   </details>
   <nav class="hidden lg:flex space-x-6">
     <a
       href="#"
-      class="px-3 py-1 rounded-full bg-green-100 text-green-600 font-semibold"
+      (click)="onBreedSelected(null)"
+      [class.bg-green-100]="!selectedBreed()"
+      [class.text-green-600]="!selectedBreed()"
+      class="px-3 py-1 rounded-full font-semibold hover:bg-gray-100 transition-colors"
       >Todas</a
     >
-    <a href="#" class="px-3 py-1 rounded-full hover:bg-gray-100">Holstein</a>
-    <a href="#" class="px-3 py-1 rounded-full hover:bg-gray-100">Ayrshire</a>
-    <a href="#" class="px-3 py-1 rounded-full hover:bg-gray-100">Jersey</a>
+    <a
+      href="#"
+      (click)="onBreedSelected('Holstein')"
+      [class.bg-green-100]="selectedBreed() === 'Holstein'"
+      [class.text-green-600]="selectedBreed() === 'Holstein'"
+      class="px-3 py-1 rounded-full font-semibold hover:bg-gray-100 transition-colors"
+      >Holstein</a
+    >
+    <a
+      href="#"
+      (click)="onBreedSelected('Ayrshire')"
+      [class.bg-green-100]="selectedBreed() === 'Ayrshire'"
+      [class.text-green-600]="selectedBreed() === 'Ayrshire'"
+      class="px-3 py-1 rounded-full font-semibold hover:bg-gray-100 transition-colors"
+      >Ayrshire</a
+    >
+    <a
+      href="#"
+      (click)="onBreedSelected('Jersey')"
+      [class.bg-green-100]="selectedBreed() === 'Jersey'"
+      [class.text-green-600]="selectedBreed() === 'Jersey'"
+      class="px-3 py-1 rounded-full font-semibold hover:bg-gray-100 transition-colors"
+      >Jersey</a
+    >
   </nav>
 
-  <!-- Grid de bovinos con más espacio -->
+  <!-- Grid de bovinos -->
   <div
     role="list"
     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center"
   >
-    @for (bovine of bovines(); track bovine.bovine_id) {
+    <ng-container *ngFor="let bovine of filteredBovines()">
       <app-bovine
         role="listitem"
         class="col-span-1"
         [bovine]="bovine"
       ></app-bovine>
-    }
+    </ng-container>
   </div>
 </section>

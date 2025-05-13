@@ -19,6 +19,11 @@ export const routes: Routes = [
             './domains/bovine/pages/bovine-detail/bovine-detail.component'
           ),
       },
+      {
+        path: 'bovines/add',
+        loadComponent: () =>
+          import('./domains/bovine/pages/add-bovine/add-bovine.component'),
+      },
     ],
   },
   {

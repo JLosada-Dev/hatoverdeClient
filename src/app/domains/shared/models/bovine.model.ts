@@ -17,3 +17,12 @@ export interface Bovine {
   events?: BovineEvent[];
   predictions?: MilkPrediction[];
 }
+export type CreateBovine = Omit<
+  Bovine,
+  | 'bovine_id'
+  | 'created_at'
+  | 'updated_at'
+  | 'productions'
+  | 'events'
+  | 'predictions'
+>;

@@ -1,0 +1,159 @@
+<div class="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 py-8">
+  <h1 class="text-2xl font-bold text-gray-900 mb-6">Agregar Nuevo Bovino</h1>
+
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    class="space-y-6 bg-white rounded-2xl shadow-sm p-6"
+  >
+    <!-- Arete -->
+    <div>
+      <label for="ear_tag" class="block text-sm font-medium text-gray-700"
+        >Arete</label
+      >
+      <input
+        id="ear_tag"
+        formControlName="ear_tag"
+        placeholder="EJ. ET12345"
+        class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+      />
+      <div
+        *ngIf="f.ear_tag.invalid && f.ear_tag.touched"
+        class="text-red-600 text-sm mt-1"
+      >
+        El arete es obligatorio.
+      </div>
+    </div>
+
+    <!-- Raza y Sexo lado a lado -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label for="breed" class="block text-sm font-medium text-gray-700"
+          >Raza</label
+        >
+        <select
+          id="breed"
+          formControlName="breed"
+          class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+        >
+          <option value="">Seleccione una raza</option>
+          <option>Holstein</option>
+          <option>Ayrshire</option>
+          <option>Jersey</option>
+        </select>
+        <div
+          *ngIf="f.breed.invalid && f.breed.touched"
+          class="text-red-600 text-sm mt-1"
+        >
+          La raza es obligatoria.
+        </div>
+      </div>
+      <div>
+        <label for="sex" class="block text-sm font-medium text-gray-700"
+          >Sexo</label
+        >
+        <select
+          id="sex"
+          formControlName="sex"
+          class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+        >
+          <option value="">Seleccione sexo</option>
+          <option>Female</option>
+          <option>Male</option>
+        </select>
+        <div
+          *ngIf="f.sex.invalid && f.sex.touched"
+          class="text-red-600 text-sm mt-1"
+        >
+          El sexo es obligatorio.
+        </div>
+      </div>
+    </div>
+
+    <!-- Fecha de Nacimiento -->
+    <div>
+      <label for="date_of_birth" class="block text-sm font-medium text-gray-700"
+        >Fecha de Nacimiento</label
+      >
+      <input
+        id="date_of_birth"
+        type="date"
+        formControlName="date_of_birth"
+        class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+      />
+      <div
+        *ngIf="f.date_of_birth.invalid && f.date_of_birth.touched"
+        class="text-red-600 text-sm mt-1"
+      >
+        La fecha de nacimiento es obligatoria.
+      </div>
+    </div>
+
+    <!-- Peso -->
+    <div>
+      <label for="weight_kg" class="block text-sm font-medium text-gray-700"
+        >Peso (kg)</label
+      >
+      <input
+        id="weight_kg"
+        type="number"
+        formControlName="weight_kg"
+        placeholder="0"
+        class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+      />
+      <div
+        *ngIf="f.weight_kg.invalid && f.weight_kg.touched"
+        class="text-red-600 text-sm mt-1"
+      >
+        El peso es obligatorio y debe ser un número positivo.
+      </div>
+    </div>
+
+    <!-- Etapa de Lactancia -->
+    <div *ngIf="f.sex.value === 'Female'">
+      <label
+        for="lactation_stage"
+        class="block text-sm font-medium text-gray-700"
+      >
+        Etapa de Lactancia
+      </label>
+      <input
+        id="lactation_stage"
+        type="number"
+        formControlName="lactation_stage"
+        min="1"
+        max="5"
+        class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+      />
+      <div
+        *ngIf="f.lactation_stage.invalid && f.lactation_stage.touched"
+        class="text-red-600 text-sm mt-1"
+      >
+        La etapa de lactancia (1–5) es obligatoria.
+      </div>
+    </div>
+
+    <!-- Activo -->
+    <div class="flex items-center mt-6">
+      <input
+        id="isActive"
+        type="checkbox"
+        formControlName="is_active"
+        class="h-4 w-4 text-green-600"
+      />
+      <label for="isActive" class="ml-2 text-sm text-gray-700">Activo</label>
+    </div>
+
+    <!-- Botón de envío -->
+    <div class="text-right">
+      <button
+        routerLink="/"
+        type="submit"
+        [disabled]="form.invalid"
+        class="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-500 disabled:opacity-50 transition-all duration-200"
+      >
+        Guardar Bovino
+      </button>
+    </div>
+  </form>
+</div>
