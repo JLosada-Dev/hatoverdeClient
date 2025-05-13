@@ -201,6 +201,7 @@
     <div class="flex items-center justify-between">
       <h3 class="text-xl font-semibold text-gray-800">Eventos Registrados</h3>
       <button
+        (click)="onAddEvent()"
         type="button"
         class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-500 focus:ring-2 focus:ring-green-400 transition-all duration-200 shadow-sm"
       >
@@ -214,7 +215,7 @@
     >
       <!-- Item de evento -->
       <div
-        *ngFor="let ev of bovine()?.events"
+        *ngFor="let ev of eventBovine()"
         class="flex flex-col sm:flex-row sm:items-center justify-between p-4 hover:bg-gray-50 transition"
       >
         <!-- Detalles -->
@@ -240,17 +241,29 @@
         <!-- Botón Editar -->
         <button
           type="button"
-          class="mt-3 sm:mt-0 sm:ml-4 flex-shrink-0 px-3 py-1 text-sm font-medium text-green-600 border border-green-600 rounded-lg bg-white/50 backdrop-blur-sm hover:bg-green-50 hover:border-green-700 hover:text-green-800 focus:outline-none focus:ring-2 focus:ring-green-300 transition"
+          (click)="onEditEvent(ev)"
+          class="inline-flex items-center gap-1 px-3 py-1 bg-green-50/70 border border-green-200 text-green-700 rounded-lg shadow hover:bg-green-100 hover:border-green-300 hover:text-green-800 focus:outline-none focus:ring-2 focus:ring-green-300 transition text-sm font-semibold"
         >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M16.862 4.487l2.651 2.651M7.5 13.5l6-6m0 0l2.646 2.646M7.5 13.5L4 20h6.5z"
+            />
+          </svg>
           Editar
         </button>
       </div>
 
       <!-- Fallback cuando no hay eventos -->
-      <div
-        *ngIf="!bovine()?.events?.length"
-        class="p-4 text-center text-gray-500"
-      >
+      <div *ngIf="!eventBovine()?.length" class="p-4 text-center text-gray-500">
         No hay eventos registrados.
       </div>
     </div>

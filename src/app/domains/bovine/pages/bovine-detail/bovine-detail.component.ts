@@ -12,6 +12,8 @@ import { Bovine } from '../../../shared/models/bovine.model';
 import { BovineService } from '../../../shared/services/bovine.service';
 import { MilkProductionService } from '../../../shared/services/milk-production.service';
 import { MilkProduction } from '@shared/models/milk-production.model';
+import { BovineEvent } from '@shared/models/bovine-event.model';
+import { BovineEventService } from '@shared/services/bovine-event.service';
 
 @Component({
   selector: 'app-bovine-detail',
@@ -30,8 +32,11 @@ export default class BovineDetailComponent implements OnInit {
   /** Señal para las producciones diarias */
   productions = signal<MilkProduction[]>([]);
 
+  eventBovine = signal<BovineEvent[]>([]);
+
   private bovineSvc = inject(BovineService);
   private productionSvc = inject(MilkProductionService);
+  private eventSvc = inject(BovineEventService);
 
   ngOnInit() {
     // 1) Cargar datos del bovino
@@ -41,6 +46,7 @@ export default class BovineDetailComponent implements OnInit {
 
         // 2) Tras recibir el bovino, cargar y filtrar producciones
         this.loadProductions(b.bovine_id);
+        this.loadEvents(Number(this.id));
       },
       error: (err) => console.error('Error fetching bovine details:', err),
     });
@@ -57,6 +63,16 @@ export default class BovineDetailComponent implements OnInit {
     });
   }
 
+  private loadEvents(bovineId: number) {
+    this.eventSvc.getAllBovineEvent().subscribe({
+      next: (all) => {
+        const filtered = all.filter((e) => e.bovine_id === bovineId);
+        this.eventBovine.set(filtered);
+      },
+      error: (err) => console.error('Error loading events:', err),
+    });
+  }
+
   /** Handler para “+ Agregar” */
   onAddProduction() {
     // Aquí abrirías un modal o navegarías a un formulario
@@ -67,6 +83,14 @@ export default class BovineDetailComponent implements OnInit {
   onEditProduction(prod: MilkProduction) {
     // Abre modal con prod o navega
     console.log('Editar producción', prod.production_id);
+  }
+
+  onAddEvent() {
+    // Aquí abrirías un modal o navegarías a un formulario
+    console.log('Agregar evento para bovino', this.id);
+  }
+  onEditEvent(event: BovineEvent) {
+    console.log('Editar evento', event.event_id);
   }
 
   // Señales para paginación
