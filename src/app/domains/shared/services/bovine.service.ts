@@ -19,7 +19,10 @@ export class BovineService {
   createBovine(bovine: CreateBovine) {
     return this.http.post<Bovine>(`${environment.apiUrl}/bovines`, bovine);
   }
-  updateBovine(id: string, bovine: Partial<Bovine>) {
-    return this.http.put<Bovine>(`${environment.apiUrl}/bovines/${id}`, bovine);
+  updateBovine(id: number, bovine: Partial<Bovine>) {
+    return this.http.patch<Bovine>(
+      `${environment.apiUrl}/bovines/${id}`,
+      bovine,
+    );
   }
 }

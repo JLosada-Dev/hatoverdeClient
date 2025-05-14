@@ -8,3 +8,11 @@ export interface MilkProduction {
   created_at?: string;
   updated_at?: string;
 }
+
+export type CreateMilkProduction = Omit<
+  MilkProduction,
+  'production_id' | 'created_at' | 'updated_at'
+>;
+
+/** Lo que pide el PUT /milk-productions/:id */
+export type UpdateMilkProduction = Omit<CreateMilkProduction, 'bovine_id'>;

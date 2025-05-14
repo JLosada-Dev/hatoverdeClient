@@ -1,0 +1,139 @@
+<!-- sólo aparece cuando `open` es true -->
+<div
+  *ngIf="open"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+>
+  <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative">
+    <!-- Botón cerrar -->
+    <button
+      type="button"
+      (click)="closed.emit()"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+      aria-label="Cerrar"
+    >
+      &times;
+    </button>
+
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">Editar Bovino</h3>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+      <!-- Arete -->
+      <div>
+        <label for="ear_tag" class="block text-sm font-medium text-gray-700"
+          >Arete</label
+        >
+        <input
+          id="ear_tag"
+          formControlName="ear_tag"
+          class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+        />
+      </div>
+
+      <!-- Raza / Sexo -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="breed" class="block text-sm font-medium text-gray-700"
+            >Raza</label
+          >
+          <select
+            id="breed"
+            formControlName="breed"
+            class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+          >
+            <option>Holstein</option>
+            <option>Ayrshire</option>
+            <option>Jersey</option>
+          </select>
+        </div>
+        <div>
+          <label for="sex" class="block text-sm font-medium text-gray-700"
+            >Sexo</label
+          >
+          <select
+            id="sex"
+            formControlName="sex"
+            class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+          >
+            <option>Female</option>
+            <option>Male</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Fecha de Nacimiento -->
+      <div>
+        <label
+          for="date_of_birth"
+          class="block text-sm font-medium text-gray-700"
+          >Fecha de Nacimiento</label
+        >
+        <input
+          id="date_of_birth"
+          type="date"
+          formControlName="date_of_birth"
+          class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+        />
+      </div>
+
+      <!-- Peso y Lactancia -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="weight_kg" class="block text-sm font-medium text-gray-700"
+            >Peso (kg)</label
+          >
+          <input
+            id="weight_kg"
+            type="number"
+            formControlName="weight_kg"
+            min="0"
+            class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+          />
+        </div>
+        <div>
+          <label
+            for="lactation_stage"
+            class="block text-sm font-medium text-gray-700"
+            >Lactancia</label
+          >
+          <input
+            id="lactation_stage"
+            type="number"
+            formControlName="lactation_stage"
+            min="1"
+            max="5"
+            class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+          />
+        </div>
+      </div>
+
+      <!-- Activo -->
+      <div class="flex items-center">
+        <input
+          type="checkbox"
+          formControlName="is_active"
+          id="active"
+          class="h-4 w-4 text-green-600 border-gray-300 rounded"
+        />
+        <label for="active" class="ml-2 text-sm text-gray-700">Activo</label>
+      </div>
+
+      <!-- Botones -->
+      <div class="flex justify-end gap-4 mt-4">
+        <button
+          type="button"
+          (click)="closed.emit()"
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          [disabled]="form.invalid"
+          class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition disabled:opacity-50"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

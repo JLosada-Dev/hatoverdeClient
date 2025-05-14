@@ -1,0 +1,97 @@
+<div
+  *ngIf="open"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+>
+  <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative">
+    <!-- Botón Cerrar -->
+    <button
+      type="button"
+      (click)="closed.emit()"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+      aria-label="Cerrar"
+    >
+      &times;
+    </button>
+
+    <h3 class="text-xl font-semibold mb-4">
+      {{ production ? "Editar Producción" : "Nueva Producción" }}
+    </h3>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+      <!-- Hora de ordeño -->
+      <div>
+        <label
+          for="milking_time"
+          class="block text-sm font-medium text-gray-700"
+          >Hora</label
+        >
+        <input
+          id="milking_time"
+          type="datetime-local"
+          formControlName="milking_time"
+          class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+        />
+      </div>
+
+      <!-- Litros -->
+      <div>
+        <label for="milk_yield" class="block text-sm font-medium text-gray-700"
+          >Litros</label
+        >
+        <input
+          id="milk_yield"
+          type="number"
+          formControlName="milk_yield"
+          min="0"
+          class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+        />
+      </div>
+
+      <!-- Grasa / Proteína -->
+      <div>
+        <label for="milk_fat" class="block text-sm font-medium text-gray-700"
+          >Grasa (%)</label
+        >
+        <input
+          id="milk_fat"
+          type="number"
+          formControlName="milk_fat"
+          step="0.1"
+          class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+        />
+      </div>
+      <div>
+        <label
+          for="milk_protein"
+          class="block text-sm font-medium text-gray-700"
+          >Proteína (%)</label
+        >
+        <input
+          id="milk_protein"
+          type="number"
+          formControlName="milk_protein"
+          step="0.1"
+          class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+        />
+      </div>
+
+      <!-- Botones -->
+      <div class="flex justify-end gap-4 mt-4">
+        <button
+          type="button"
+          (click)="closed.emit()"
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          [disabled]="form.invalid"
+          class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition disabled:opacity-50"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
