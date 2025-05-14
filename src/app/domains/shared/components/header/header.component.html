@@ -11,7 +11,7 @@
         aria-controls="navbar-default"
         aria-expanded="false"
       >
-        <span class="sr-only">Open main menu</span>
+        <span class="sr-only">Abrir menú principal</span>
         <svg
           class="w-6 h-6"
           fill="none"
@@ -32,7 +32,7 @@
         routerLink="/"
         class="flex items-center space-x-2 transform transition-transform duration-200 hover:scale-105"
       >
-        <img src="icons/vaca.png" alt="HatoVerde Logo" class="h-8 w-8" />
+        <img src="icons/vaca.png" alt="Logo de HatoVerde" class="h-8 w-8" />
         <span class="text-xl font-semibold whitespace-nowrap">
           <span class="text-gray-800">Hato</span
           ><span class="text-green-500">Verde</span>
@@ -40,7 +40,7 @@
       </a>
     </div>
 
-    <!-- Menu -->
+    <!-- Menú -->
     <div
       [class.hidden]="!showMenu()"
       class="absolute top-full inset-x-0 mt-1 bg-white border-t border-gray-200 shadow-md md:static md:block md:mt-0 md:bg-transparent md:border-none md:shadow-none transition-all duration-200"
@@ -55,25 +55,16 @@
             [routerLinkActiveOptions]="{ exact: true }"
             class="relative text-gray-700 hover:text-green-600 transition-colors duration-200 group before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-full before:h-0.5 before:bg-green-500 before:scale-x-0 before:origin-left hover:before:scale-x-100 before:transition-transform before:duration-200"
           >
-            Home
+            Bovinos
           </a>
         </li>
         <li>
           <a
-            routerLink="/about"
+            routerLink="/produccion"
             routerLinkActive="text-green-600"
             class="relative text-gray-700 hover:text-green-600 transition-colors duration-200 group before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-full before:h-0.5 before:bg-green-500 before:scale-x-0 before:origin-left hover:before:scale-x-100 before:transition-transform before:duration-200"
           >
-            About
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/locations"
-            routerLinkActive="text-green-600"
-            class="relative text-gray-700 hover:text-green-600 transition-colors duration-200 group before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-full before:h-0.5 before:bg-green-500 before:scale-x-0 before:origin-left hover:before:scale-x-100 before:transition-transform before:duration-200"
-          >
-            Locations
+            Producción
           </a>
         </li>
         <li>
@@ -82,7 +73,16 @@
             routerLinkActive="text-green-600"
             class="relative text-gray-700 hover:text-green-600 transition-colors duration-200 group before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-full before:h-0.5 before:bg-green-500 before:scale-x-0 before:origin-left hover:before:scale-x-100 before:transition-transform before:duration-200"
           >
-            Services
+            Servicios
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/about"
+            routerLinkActive="text-green-600"
+            class="relative text-gray-700 hover:text-green-600 transition-colors duration-200 group before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-full before:h-0.5 before:bg-green-500 before:scale-x-0 before:origin-left hover:before:scale-x-100 before:transition-transform before:duration-200"
+          >
+            Quiénes somos
           </a>
         </li>
       </ul>

@@ -13,6 +13,13 @@ export const routes: Routes = [
           import('./domains/bovine/pages/list-bovine/list-bovine.component'),
       },
       {
+        path: 'about',
+        loadComponent: () =>
+          import('./domains/info/pages/about/about.component').then(
+            (m) => m.AboutComponent,
+          ),
+      },
+      {
         path: 'bovine/:id',
         loadComponent: () =>
           import(
