@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment.development';
 })
 export class BovineService {
   private http = inject(HttpClient);
-
+  private baseUrl = `${environment.apiUrl}/bovines`;
   // Consultar todos los bovinos
   getAllBovines() {
     return this.http.get<Bovine[]>(`${environment.apiUrl}/bovines`);
@@ -23,6 +23,12 @@ export class BovineService {
     return this.http.patch<Bovine>(
       `${environment.apiUrl}/bovines/${id}`,
       bovine,
+    );
+  }
+  toggleActiveBovine(id: number, isActive: boolean) {
+    return this.http.patch<{ id: number; is_active: boolean }>(
+      `${this.baseUrl}/${id}/toggle-active`,
+      { is_active: isActive },
     );
   }
 }

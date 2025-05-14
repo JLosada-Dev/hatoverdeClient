@@ -1,0 +1,147 @@
+<!-- shared/components/bovine-event-modal/bovine-event-modal.component.html -->
+<div
+  *ngIf="open"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+>
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 space-y-4">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-gray-800">
+        {{ event ? "Editar Evento" : "Nuevo Evento" }}
+      </h2>
+      <button
+        (click)="onClose()"
+        class="text-gray-500 hover:text-gray-700"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+      <!-- Fecha/Hora -->
+      <div>
+        <label for="event_date" class="block text-sm font-medium text-gray-700"
+          >Fecha y hora</label
+        >
+        <input
+          id="event_date"
+          type="datetime-local"
+          formControlName="event_date"
+          class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+        />
+      </div>
+
+      <!-- Categoría -->
+      <div>
+        <label
+          for="event_category"
+          class="block text-sm font-medium text-gray-700"
+          >Categoría</label
+        >
+        <select
+          id="event_category"
+          formControlName="event_category"
+          class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+        >
+          <option value="Health">Health</option>
+          <option value="Reproduction">Reproduction</option>
+        </select>
+      </div>
+
+      <!-- Tipo -->
+      <div>
+        <label for="event_type" class="block text-sm font-medium text-gray-700"
+          >Tipo</label
+        >
+        <input
+          id="event_type"
+          type="text"
+          formControlName="event_type"
+          placeholder="Descripción del evento"
+          class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+        />
+      </div>
+
+      <!-- Severidad + Resultado -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="severity" class="block text-sm font-medium text-gray-700"
+            >Severidad</label
+          >
+          <select
+            id="severity"
+            formControlName="severity"
+            class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+          >
+            <option value="">—</option>
+            <option value="Mild">Mild</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Severe">Severe</option>
+          </select>
+        </div>
+        <div>
+          <label for="result" class="block text-sm font-medium text-gray-700"
+            >Resultado</label
+          >
+          <select
+            id="result"
+            formControlName="result"
+            class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+          >
+            <option value="">—</option>
+            <option value="Positive">Positive</option>
+            <option value="Negative">Negative</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Afecta lactancia -->
+      <div class="flex items-center space-x-2">
+        <input
+          id="lactation_affected"
+          type="checkbox"
+          formControlName="lactation_affected"
+          class="h-4 w-4 text-green-600 border-gray-300 rounded"
+        />
+        <label for="lactation_affected" class="text-sm text-gray-700">
+          Afecta lactancia
+        </label>
+      </div>
+
+      <!-- Notas -->
+      <div>
+        <label for="notes" class="block text-sm font-medium text-gray-700"
+          >Notas</label
+        >
+        <textarea
+          id="notes"
+          rows="3"
+          formControlName="notes"
+          class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-400 focus:border-green-400"
+          placeholder="Opcional…"
+        ></textarea>
+      </div>
+
+      <!-- Botones -->
+      <div class="flex justify-end gap-4 mt-4">
+        <button
+          type="button"
+          (click)="closed.emit()"
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          [disabled]="form.invalid"
+          class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition disabled:opacity-50"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

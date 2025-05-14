@@ -1,5 +1,4 @@
 // pages/bovine-detail/bovine-detail.component.ts
-
 import {
   Component,
   Input,
@@ -16,7 +15,11 @@ import {
   CreateMilkProduction,
   UpdateMilkProduction,
 } from '@shared/models/milk-production.model';
-import { BovineEvent } from '@shared/models/bovine-event.model';
+import {
+  BovineEvent,
+  CreateBovineEvent,
+  UpdateBovineEvent,
+} from '@shared/models/bovine-event.model';
 
 import { BovineService } from '@shared/services/bovine.service';
 import { MilkProductionService } from '@shared/services/milk-production.service';
@@ -24,6 +27,7 @@ import { BovineEventService } from '@shared/services/bovine-event.service';
 
 import { BovineEditModalComponent } from '@shared/components/bovine-edit-modal/bovine-edit-modal.component';
 import { MilkProductionModalComponent } from '@shared/components/milk-production-modal/milk-production-modal.component';
+import { BovineEventModalComponent } from '@shared/components/bovine-event-modal/bovine-event-modal.component';
 
 @Component({
   selector: 'app-bovine-detail',
@@ -32,44 +36,65 @@ import { MilkProductionModalComponent } from '@shared/components/milk-production
     CommonModule,
     BovineEditModalComponent,
     MilkProductionModalComponent,
+    BovineEventModalComponent,
   ],
   templateUrl: './bovine-detail.component.html',
   styleUrls: ['./bovine-detail.component.css'],
 })
 export default class BovineDetailComponent implements OnInit {
-  /** Input: bovine ID from parent */
+  //───────────────────────────────────────────────────────────────────────────────
+  // Input & Data Signals
+  //───────────────────────────────────────────────────────────────────────────────
   @Input({ required: true }) id!: string;
 
-  /** Señales de datos */
   bovine = signal<Bovine | null>(null);
   productions = signal<MilkProduction[]>([]);
   eventBovine = signal<BovineEvent[]>([]);
 
-  /** Paginación */
+  //───────────────────────────────────────────────────────────────────────────────
+  // Pagination Signals & Computed
+  //───────────────────────────────────────────────────────────────────────────────
   pageIndex = signal(0);
   pageSize = signal(5);
+
   paginatedProductions = computed(() => {
     const start = this.pageIndex() * this.pageSize();
     return this.productions().slice(start, start + this.pageSize());
   });
+
   totalPages = computed(() =>
     Math.ceil(this.productions().length / this.pageSize()),
   );
 
-  /** Modales de edición */
-  isEditOpen = signal(false); // para editar bovino
-  isAddProdOpen = signal(false); // para crear producción
-  isEditProdOpen = signal(false); // para editar producción
+  //───────────────────────────────────────────────────────────────────────────────
+  // Modal Visibility Signals
+  //───────────────────────────────────────────────────────────────────────────────
+  isEditOpen = signal(false); // Edit bovine
+  isAddProdOpen = signal(false); // Create production
+  isEditProdOpen = signal(false); // Edit production
   selectedProd = signal<MilkProduction | null>(null);
 
+  isAddEventOpen = signal(false); // Create event
+  isEditEventOpen = signal(false); // Edit event
+  selectedEvent = signal<BovineEvent | null>(null);
+
+  //───────────────────────────────────────────────────────────────────────────────
+  // Service injections
+  //───────────────────────────────────────────────────────────────────────────────
   private bovineSvc = inject(BovineService);
   private productionSvc = inject(MilkProductionService);
   private eventSvc = inject(BovineEventService);
 
+  //───────────────────────────────────────────────────────────────────────────────
+  // Lifecycle
+  //───────────────────────────────────────────────────────────────────────────────
   ngOnInit() {
     this.loadBovine();
   }
 
+  //───────────────────────────────────────────────────────────────────────────────
+  // Data Loading
+  //───────────────────────────────────────────────────────────────────────────────
   private loadBovine() {
     this.bovineSvc.getBovineById(this.id).subscribe({
       next: (b) => {
@@ -77,7 +102,7 @@ export default class BovineDetailComponent implements OnInit {
         this.loadProductions(b.bovine_id);
         this.loadEvents(b.bovine_id);
       },
-      error: (err) => console.error(err),
+      error: (err) => console.error('Error fetching bovine:', err),
     });
   }
 
@@ -85,7 +110,7 @@ export default class BovineDetailComponent implements OnInit {
     this.productionSvc.getAllMilkProduction().subscribe({
       next: (all) =>
         this.productions.set(all.filter((p) => p.bovine_id === bovineId)),
-      error: (err) => console.error(err),
+      error: (err) => console.error('Error loading productions:', err),
     });
   }
 
@@ -93,11 +118,13 @@ export default class BovineDetailComponent implements OnInit {
     this.eventSvc.getAllBovineEvent().subscribe({
       next: (all) =>
         this.eventBovine.set(all.filter((e) => e.bovine_id === bovineId)),
-      error: (err) => console.error(err),
+      error: (err) => console.error('Error loading events:', err),
     });
   }
 
-  /** Editar bovino */
+  //───────────────────────────────────────────────────────────────────────────────
+  // Handlers: Edit Bovine
+  //───────────────────────────────────────────────────────────────────────────────
   onEditBovine() {
     this.isEditOpen.set(true);
   }
@@ -111,7 +138,9 @@ export default class BovineDetailComponent implements OnInit {
       });
   }
 
-  /** Producciones: apertura de modales */
+  //───────────────────────────────────────────────────────────────────────────────
+  // Handlers: Productions
+  //───────────────────────────────────────────────────────────────────────────────
   onAddProduction() {
     this.selectedProd.set(null);
     this.isAddProdOpen.set(true);
@@ -128,8 +157,8 @@ export default class BovineDetailComponent implements OnInit {
   }) {
     const { id, data } = event;
     const call$ = id
-      ? this.productionSvc.updateMilkProduction(id, data) // data es UpdateMilkProduction
-      : this.productionSvc.createMilkProduction(data as CreateMilkProduction); // data es CreateMilkProduction
+      ? this.productionSvc.updateMilkProduction(id, data)
+      : this.productionSvc.createMilkProduction(data as CreateMilkProduction);
 
     call$.subscribe({
       next: () => {
@@ -137,24 +166,65 @@ export default class BovineDetailComponent implements OnInit {
         this.isAddProdOpen.set(false);
         this.isEditProdOpen.set(false);
       },
-      error: (err) => console.error('Error guardando producción:', err),
+      error: (err) => console.error('Error saving production:', err),
     });
   }
 
-  /** Eventos: (igual que antes) */
+  //───────────────────────────────────────────────────────────────────────────────
+  // Handlers: Events
+  //───────────────────────────────────────────────────────────────────────────────
   onAddEvent() {
-    console.log('Agregar evento', this.id);
-  }
-  onEditEvent(e: BovineEvent) {
-    console.log('Editar evento', e.event_id);
+    this.selectedEvent.set(null);
+    this.isAddEventOpen.set(true);
   }
 
-  /** Paginación */
+  onEditEvent(ev: BovineEvent) {
+    this.selectedEvent.set(ev);
+    this.isEditEventOpen.set(true);
+  }
+
+  onSaveEvent(payload: {
+    id?: number;
+    data: CreateBovineEvent | UpdateBovineEvent;
+  }) {
+    const { id, data } = payload;
+    const call$ = id
+      ? this.eventSvc.updateBovineEvent(id, data as UpdateBovineEvent)
+      : this.eventSvc.createBovineEvent(data as CreateBovineEvent);
+
+    call$.subscribe({
+      next: () => {
+        this.loadEvents(this.bovine()!.bovine_id);
+        this.isAddEventOpen.set(false);
+        this.isEditEventOpen.set(false);
+      },
+      error: (err) => console.error('Error guardando evento:', err),
+    });
+  }
+
+  //───────────────────────────────────────────────────────────────────────────────
+  // Pagination Controls
+  //───────────────────────────────────────────────────────────────────────────────
   prevPage() {
-    if (this.pageIndex() > 0) this.pageIndex.update((i) => i - 1);
+    if (this.pageIndex() > 0) {
+      this.pageIndex.update((i) => i - 1);
+    }
   }
   nextPage() {
-    if (this.pageIndex() < this.totalPages() - 1)
+    if (this.pageIndex() < this.totalPages() - 1) {
       this.pageIndex.update((i) => i + 1);
+    }
+  }
+  //───────────────────────────────────────────────────────────────────────────────
+  // Activar / Desactivar bovino
+  //───────────────────────────────────────────────────────────────────────────────
+  toggleActive() {
+    const b = this.bovine();
+    if (!b) return;
+    this.bovineSvc.toggleActiveBovine(b.bovine_id, !b.is_active).subscribe({
+      next: ({ is_active }) =>
+        this.bovine.update((c) => (c ? { ...c, is_active } : c)),
+      error: (err) => console.error('Error toggling active:', err),
+    });
   }
 }
