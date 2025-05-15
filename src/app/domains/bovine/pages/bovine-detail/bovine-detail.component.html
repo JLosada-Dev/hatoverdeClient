@@ -101,98 +101,106 @@
       </div>
     </div>
   </article>
-
-  <!-- 2) Producción diaria -->
-  <article
-    *ngIf="bovine()?.sex === 'Female'"
-    class="bg-white rounded-xl shadow-sm border-t-2 border-green-300 transition-transform duration-300 ease-in-out transform hover:shadow-lg hover:-translate-y-1 focus-within:ring-2 focus-within:ring-green-200"
-    tabindex="0"
-  >
-    <header
-      class="bg-green-50 rounded-t-xl px-6 py-4 flex items-center justify-between"
-    >
-      <h2 class="text-xl font-semibold text-gray-800">Producción Diaria</h2>
-      <button
-        (click)="onAddProduction()"
-        class="px-4 py-2 text-sm font-semibold text-white bg-green-600 rounded-full transition-colors duration-200 hover:bg-green-500 hover:cursor-pointer"
+  <!-- 2) Producción diaria (solo hembras) -->
+  @if (bovine()?.sex === "Female") {
+    <div class="space-y-6">
+      <!-- Header -->
+      <header
+        class="bg-green-50 rounded-t-xl border-t-4 border-green-600 px-6 py-4 flex items-center justify-between"
       >
-        + Agregar
-      </button>
-    </header>
-    <div class="overflow-x-auto p-6">
-      <table class="min-w-full table-auto divide-y divide-gray-200">
-        <thead class="bg-gray-100 uppercase text-xs text-gray-700">
-          <tr>
-            <th class="px-4 py-2 text-left">Hora</th>
-            <th class="px-4 py-2 text-left">Litros</th>
-            <th class="px-4 py-2 text-left">Grasa (%)</th>
-            <th class="px-4 py-2 text-left">Proteína (%)</th>
-            <th class="w-20 px-4 py-2 text-center">Acción</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr
-            *ngFor="let prod of paginatedProductions()"
-            class="hover:bg-green-50 transition-colors"
+        <h2 class="text-xl font-semibold text-gray-800">Producción Diaria</h2>
+        <button
+          (click)="onAddProduction()"
+          class="px-4 py-2 text-sm font-semibold text-white bg-green-600 rounded-full hover:bg-green-500 transition"
+        >
+          + Agregar
+        </button>
+      </header>
+      <!-- Grid: Tabla (2 col) | Monitor (1 col) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 px-6 pb-6">
+        <!-- Tabla -->
+        <div
+          class="lg:col-span-2 bg-white rounded-xl shadow p-4 border border-gray-100 flex flex-col"
+        >
+          <!-- Tabla scrollable -->
+          <div class="overflow-x-auto mb-4">
+            <table class="min-w-full table-auto divide-y divide-gray-200">
+              <thead class="bg-gray-100 uppercase text-xs text-gray-700">
+                <tr>
+                  <th class="px-4 py-2 text-left">Hora</th>
+                  <th class="px-4 py-2 text-left">Litros</th>
+                  <th class="px-4 py-2 text-left">Grasa (%)</th>
+                  <th class="px-4 py-2 text-left">Proteína (%)</th>
+                  <th class="w-20 px-4 py-2 text-center">Acción</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                @for (prod of paginatedProductions(); track prod) {
+                  <tr class="hover:bg-green-50 transition">
+                    <td class="px-4 py-2 text-green-800">
+                      {{ prod.milking_time | date: "shortTime" }}
+                    </td>
+                    <td class="px-4 py-2">{{ prod.milk_yield }}</td>
+                    <td class="px-4 py-2">{{ prod.milk_fat ?? "–" }}</td>
+                    <td class="px-4 py-2">{{ prod.milk_protein ?? "–" }}</td>
+                    <td class="px-4 py-2 text-center">
+                      <button
+                        (click)="onEditProduction(prod)"
+                        class="inline-flex items-center px-2 py-1 bg-green-50 border border-green-200 text-green-700 rounded-full hover:bg-green-100 transition"
+                      >
+                        ✎
+                      </button>
+                    </td>
+                  </tr>
+                }
+                @if (!productions().length) {
+                  <tr>
+                    <td colspan="5" class="px-4 py-2 text-center text-gray-500">
+                      No hay registros.
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <!-- Paginación sólo para la tabla -->
+          <div
+            class="mt-auto flex items-center justify-between text-sm text-gray-700"
           >
-            <td class="px-4 py-2 text-green-800">
-              {{ prod.milking_time | date: "shortTime" }}
-            </td>
-            <td class="px-4 py-2">{{ prod.milk_yield }}</td>
-            <td class="px-4 py-2">{{ prod.milk_fat ?? "–" }}</td>
-            <td class="px-4 py-2">{{ prod.milk_protein ?? "–" }}</td>
-            <td class="px-4 py-2 text-center">
-              <button
-                (click)="onEditProduction(prod)"
-                class="inline-flex items-center px-2 py-1 bg-green-50 border border-green-200 text-green-700 rounded-full transition-colors hover:bg-green-100 hover:cursor-pointer"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M16.862 4.487l2.651 2.651M7.5 13.5l6-6m0 0l2.646 2.646M7.5 13.5L4 20h6.5z"
-                  />
-                </svg>
-              </button>
-            </td>
-          </tr>
-          <tr *ngIf="!productions().length">
-            <td colspan="5" class="px-4 py-2 text-center text-gray-500">
-              No hay registros.
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            <button
+              (click)="prevPage()"
+              [disabled]="pageIndex() === 0"
+              class="px-2 py-1 border border-gray-300 rounded disabled:opacity-50 hover:bg-gray-100 transition"
+            >
+              ← Anterior
+            </button>
+            <span class="font-semibold">
+              Página {{ pageIndex() + 1 }} de {{ totalPages() }}
+            </span>
+            <button
+              (click)="nextPage()"
+              [disabled]="pageIndex() + 1 >= totalPages()"
+              class="px-2 py-1 border border-gray-300 rounded disabled:opacity-50 hover:bg-gray-100 transition"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </div>
+        <!-- Monitor en tiempo real -->
+        <div
+          class="bg-white rounded-xl shadow p-4 border border-gray-100 flex flex-col"
+        >
+          <h3 class="text-lg font-semibold text-gray-800 mb-4">
+            Monitor en Tiempo Real
+          </h3>
+          <app-milk-monitor
+            [bovineId]="bovine()!.bovine_id"
+            class="flex-1"
+          ></app-milk-monitor>
+        </div>
+      </div>
     </div>
-    <footer
-      class="flex items-center justify-between px-6 py-4 text-sm text-gray-700"
-    >
-      <button
-        (click)="prevPage()"
-        [disabled]="pageIndex() === 0"
-        class="px-2 py-1 border border-gray-300 rounded disabled:opacity-50 hover:bg-gray-100 transition-colors hover:cursor-pointer"
-      >
-        ← Anterior
-      </button>
-      <span class="font-semibold"
-        >Página {{ pageIndex() + 1 }} de {{ totalPages() }}</span
-      >
-      <button
-        (click)="nextPage()"
-        [disabled]="pageIndex() + 1 >= totalPages()"
-        class="px-2 py-1 border border-gray-300 rounded disabled:opacity-50 hover:bg-gray-100 transition-colors hover:cursor-pointer"
-      >
-        Siguiente →
-      </button>
-    </footer>
-  </article>
+  }
 
   <!-- 3) Eventos registrados -->
   <article

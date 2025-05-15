@@ -1,0 +1,71 @@
+<div class="space-y-6">
+  <!-- 1) Loader -->
+  <ng-container *ngIf="loading(); else loaded">
+    <div class="flex justify-center items-center py-8">
+      <span class="text-gray-500">Cargando datos...</span>
+    </div>
+  </ng-container>
+
+  <ng-template #loaded>
+    <!-- 2) Error -->
+    <div *ngIf="error(); else dashboard">
+      <p class="text-center text-red-600">{{ error() }}</p>
+    </div>
+
+    <!-- 3) Dashboard -->
+    <ng-template #dashboard>
+      <!-- 3.1) Tarjeta resumen -->
+      <ng-container *ngIf="summary() as s">
+        <div
+          class="bg-white rounded-2xl shadow-sm p-6 flex flex-col sm:flex-row items-center justify-between"
+        >
+          <div>
+            <p class="text-sm font-medium text-gray-500">Producción hoy</p>
+            <p class="text-4xl font-extrabold text-gray-900">
+              {{ s.total || 0 | number: "1.0-0" }} L
+            </p>
+          </div>
+          <span
+            [ngClass]="{
+              'bg-red-100 text-red-700': s.total < 15,
+              'bg-green-100 text-green-700': s.total >= 16,
+            }"
+            class="mt-4 sm:mt-0 inline-block px-3 py-1 rounded-full font-medium"
+          >
+            {{ s.total < 15 ? "Bajo" : "Normal" }}
+          </span>
+        </div>
+      </ng-container>
+
+      <!-- 3.2) Tabla de lecturas -->
+      <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-medium text-gray-800">Últimas lecturas</h3>
+        </div>
+        <div class="px-6 py-4 overflow-x-auto">
+          <table class="min-w-full text-left text-sm">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-2 font-semibold text-gray-700">Hora</th>
+                <th class="px-4 py-2 font-semibold text-gray-700">Litros</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr *ngFor="let p of hourly()">
+                <td class="px-4 py-2 text-gray-600">{{ p.hour }}</td>
+                <td class="px-4 py-2 text-gray-600">
+                  {{ p.totalYield }}
+                </td>
+              </tr>
+              <tr *ngIf="!hourly().length">
+                <td colspan="2" class="px-4 py-2 text-center text-gray-500">
+                  Sin datos disponibles.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>

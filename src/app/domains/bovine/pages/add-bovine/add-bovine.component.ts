@@ -6,7 +6,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { RouterModule, Router, RouterLinkWithHref } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import type { CreateBovine } from '@shared/models/bovine.model';
 import { BovineService } from '@shared/services/bovine.service';
@@ -14,12 +14,7 @@ import { BovineService } from '@shared/services/bovine.service';
 @Component({
   selector: 'app-add-bovine',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterModule,
-    RouterLinkWithHref,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './add-bovine.component.html',
 })
 export default class AddBovineComponent implements OnInit {
@@ -49,7 +44,7 @@ export default class AddBovineComponent implements OnInit {
     }),
     lactation_stage: new FormControl<number>(1, {
       nonNullable: true,
-      validators: [Validators.required, Validators.min(1), Validators.max(5)],
+      validators: [Validators.required, Validators.min(0), Validators.max(5)],
     }),
     is_active: new FormControl<boolean>(true, {
       nonNullable: true,
@@ -90,7 +85,7 @@ export default class AddBovineComponent implements OnInit {
     };
 
     this.bovineService.createBovine(payload).subscribe({
-      next: () => this.router.navigate(['/bovines']),
+      next: () => this.router.navigate(['/']),
       error: (err) => console.error('Error al crear bovino', err),
     });
   }

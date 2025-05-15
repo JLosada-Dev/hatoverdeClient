@@ -16,3 +16,17 @@ export type CreateMilkProduction = Omit<
 
 /** Lo que pide el PUT /milk-productions/:id */
 export type UpdateMilkProduction = Omit<CreateMilkProduction, 'bovine_id'>;
+
+export interface DailySummary {
+  date: string;
+  total: number;
+  count: number;
+  average: number;
+  min: number;
+  max: number;
+}
+
+export interface HourlyPoint {
+  hour: string; // "08:00"
+  totalYield: number;
+}

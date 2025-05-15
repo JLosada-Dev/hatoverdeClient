@@ -28,6 +28,7 @@ import { BovineEventService } from '@shared/services/bovine-event.service';
 import { BovineEditModalComponent } from '@shared/components/bovine-edit-modal/bovine-edit-modal.component';
 import { MilkProductionModalComponent } from '@shared/components/milk-production-modal/milk-production-modal.component';
 import { BovineEventModalComponent } from '@shared/components/bovine-event-modal/bovine-event-modal.component';
+import { MilkMonitorComponent } from '@bovine/components/milk-monitor/milk-monitor.component';
 
 @Component({
   selector: 'app-bovine-detail',
@@ -37,6 +38,7 @@ import { BovineEventModalComponent } from '@shared/components/bovine-event-modal
     BovineEditModalComponent,
     MilkProductionModalComponent,
     BovineEventModalComponent,
+    MilkMonitorComponent,
   ],
   templateUrl: './bovine-detail.component.html',
   styleUrls: ['./bovine-detail.component.css'],
@@ -55,7 +57,7 @@ export default class BovineDetailComponent implements OnInit {
   // Pagination Signals & Computed
   //───────────────────────────────────────────────────────────────────────────────
   pageIndex = signal(0);
-  pageSize = signal(5);
+  pageSize = signal(8);
 
   paginatedProductions = computed(() => {
     const start = this.pageIndex() * this.pageSize();
