@@ -24,7 +24,7 @@
         <!-- Nacimiento -->
         <dt class="text-xs font-medium text-gray-500">Nacimiento</dt>
         <dd class="text-sm text-gray-700">
-          {{ bovine.date_of_birth | date: "mediumDate" }}
+          {{ bovine.date_of_birth | date: 'mediumDate' }}
         </dd>
 
         <!-- Peso -->
@@ -34,14 +34,14 @@
         <!-- Sexo -->
         <dt class="text-xs font-medium text-gray-500">Sexo</dt>
         <dd class="text-sm text-gray-700">
-          {{ bovine.sex === "Male" ? "Macho" : "Hembra" }}
+          {{ bovine.sex === 'Male' ? 'Macho' : 'Hembra' }}
         </dd>
 
         <!-- Lactancia: siempre visible, pero dash si es macho -->
         <dt class="text-xs font-medium text-gray-500">Lactancia</dt>
         <dd class="text-sm text-gray-700">
           {{
-            bovine.sex === "Female" ? "Etapa " + bovine.lactation_stage : "—"
+            bovine.sex === 'Female' ? 'Etapa ' + bovine.lactation_stage : '—'
           }}
         </dd>
       </dl>

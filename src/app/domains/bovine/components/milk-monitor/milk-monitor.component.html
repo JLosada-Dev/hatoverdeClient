@@ -22,7 +22,7 @@
           <div>
             <p class="text-sm font-medium text-gray-500">Producción hoy</p>
             <p class="text-4xl font-extrabold text-gray-900">
-              {{ s.total || 0 | number: "1.0-0" }} L
+              {{ s.total || 0 | number: '1.0-0' }} L
             </p>
           </div>
           <span
@@ -32,7 +32,7 @@
             }"
             class="mt-4 sm:mt-0 inline-block px-3 py-1 rounded-full font-medium"
           >
-            {{ s.total < 15 ? "Bajo" : "Normal" }}
+            {{ s.total < 15 ? 'Bajo' : 'Normal' }}
           </span>
         </div>
       </ng-container>

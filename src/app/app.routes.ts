@@ -31,6 +31,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./domains/bovine/pages/add-bovine/add-bovine.component'),
       },
+      {
+        path: 'production',
+        loadComponent: () =>
+          import(
+            './domains/production/pages/production-esp32/production-esp32.component'
+          ),
+      },
     ],
   },
   {

@@ -64,21 +64,21 @@
           <li
             class="bg-white border border-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-medium shadow-sm transition-colors duration-200 hover:bg-green-50 hover:border-green-200"
           >
-            Sexo: {{ bovine()?.sex === "Male" ? "Macho" : "Hembra" }}
+            Sexo: {{ bovine()?.sex === 'Male' ? 'Macho' : 'Hembra' }}
           </li>
           <li
             class="bg-white border border-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-medium shadow-sm transition-colors duration-200 hover:bg-green-50 hover:border-green-200"
           >
-            Nacido: {{ bovine()?.date_of_birth | date: "longDate" }}
+            Nacido: {{ bovine()?.date_of_birth | date: 'longDate' }}
           </li>
           <li
             class="bg-white border border-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-medium shadow-sm transition-colors duration-200 hover:bg-green-50 hover:border-green-200"
           >
             Lactancia:
             {{
-              bovine()?.sex === "Female"
-                ? "Etapa " + bovine()?.lactation_stage
-                : "—"
+              bovine()?.sex === 'Female'
+                ? 'Etapa ' + bovine()?.lactation_stage
+                : '—'
             }}
           </li>
         </ul>
@@ -95,14 +95,14 @@
             "
             class="inline-block px-4 py-1 text-sm font-semibold rounded-full shadow-sm transition-transform duration-200 hover:scale-105 focus:outline-none hover:cursor-pointer"
           >
-            {{ bovine()?.is_active ? "Activo" : "Inactivo" }}
+            {{ bovine()?.is_active ? 'Activo' : 'Inactivo' }}
           </button>
         </div>
       </div>
     </div>
   </article>
   <!-- 2) Producción diaria (solo hembras) -->
-  @if (bovine()?.sex === "Female") {
+  @if (bovine()?.sex === 'Female') {
     <div class="space-y-6">
       <!-- Header -->
       <header
@@ -138,11 +138,11 @@
                 @for (prod of paginatedProductions(); track prod) {
                   <tr class="hover:bg-green-50 transition">
                     <td class="px-4 py-2 text-green-800">
-                      {{ prod.milking_time | date: "shortTime" }}
+                      {{ prod.milking_time | date: 'shortTime' }}
                     </td>
                     <td class="px-4 py-2">{{ prod.milk_yield }}</td>
-                    <td class="px-4 py-2">{{ prod.milk_fat ?? "–" }}</td>
-                    <td class="px-4 py-2">{{ prod.milk_protein ?? "–" }}</td>
+                    <td class="px-4 py-2">{{ prod.milk_fat ?? '–' }}</td>
+                    <td class="px-4 py-2">{{ prod.milk_protein ?? '–' }}</td>
                     <td class="px-4 py-2 text-center">
                       <button
                         (click)="onEditProduction(prod)"
@@ -227,11 +227,11 @@
           class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700"
         >
           <div><strong>Categoría:</strong> {{ ev.event_category }}</div>
-          <div><strong>Fecha:</strong> {{ ev.event_date | date: "short" }}</div>
+          <div><strong>Fecha:</strong> {{ ev.event_date | date: 'short' }}</div>
           <div><strong>Tipo:</strong> {{ ev.event_type }}</div>
-          <div><strong>Severidad:</strong> {{ ev.severity ?? "–" }}</div>
+          <div><strong>Severidad:</strong> {{ ev.severity ?? '–' }}</div>
           <div class="sm:col-span-2">
-            <strong>Notas:</strong> {{ ev.notes ?? "–" }}
+            <strong>Notas:</strong> {{ ev.notes ?? '–' }}
           </div>
         </div>
         <button
