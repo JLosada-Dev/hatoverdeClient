@@ -1,17 +1,10 @@
 <div
-  class="p-5 bg-emerald-900 text-white rounded-lg max-w-md mx-auto shadow-xl border border-emerald-700 mt-8"
+  class="max-w-lg mx-auto p-8 bg-white rounded-2xl shadow-xl border border-gray-100"
 >
-  <h2 class="text-xl font-bold mb-3 text-emerald-100">
-    Enviar configuración al ESP32
-  </h2>
-  <button
-    (click)="enviarConfiguracion()"
-    class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 px-6 rounded-md transition duration-300 shadow-md flex items-center justify-center gap-2 w-full sm:w-auto"
-  >
-    <span>Enviar datos al ESP32</span>
+  <!-- Header with icon -->
+  <div class="text-center mb-6">
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-5 w-5"
+      class="h-12 w-12 mx-auto mb-2 text-green-600"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -19,9 +12,380 @@
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
-        stroke-width="2"
-        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+        stroke-width="1.5"
+        d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"
       />
     </svg>
-  </button>
+    <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">
+      Configuración de ESP32
+    </h2>
+    <p class="text-sm text-gray-500 mt-1">
+      Complete los datos para configurar el dispositivo
+    </p>
+  </div>
+
+  <!-- Status indicators -->
+  <div *ngIf="lastError() || pending()" class="mb-6">
+    <!-- Error message with improved design -->
+    <div
+      *ngIf="lastError() as err"
+      class="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg animate-fadeIn"
+    >
+      <svg
+        class="h-6 w-6 text-red-600 mt-1 flex-shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <div class="text-sm text-red-700">
+        <p>
+          <strong>Error {{ err.error_code }}:</strong> {{ err.mensaje }}
+        </p>
+        <p class="mt-1 text-gray-600">
+          Producción #{{ err.production_id || 'N/A' }} —
+          {{ err.timestamp | date: 'short' }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Pending production with improved design -->
+    <div
+      *ngIf="pending() as p"
+      class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg space-y-3 animate-fadeIn mt-3"
+    >
+      <div class="flex items-center mb-2">
+        <svg
+          class="h-5 w-5 text-yellow-500 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <h3 class="text-md font-semibold text-gray-800">
+          Producción pendiente
+        </h3>
+      </div>
+      <div class="grid grid-cols-2 gap-2 text-sm text-gray-700">
+        <div><strong>Bovino:</strong> {{ p.bovine_id }}</div>
+        <div>
+          <strong>Volumen:</strong> {{ p.milk_yield | number: '1.2-2' }} L
+        </div>
+        <div><strong>Grasa:</strong> {{ p.milk_fat }}%</div>
+        <div><strong>Proteína:</strong> {{ p.milk_protein }}%</div>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button
+          (click)="confirmarProduccion()"
+          class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-500 focus:ring-2 focus:ring-green-200 transition flex items-center justify-center"
+        >
+          <svg
+            class="h-4 w-4 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+          Confirmar
+        </button>
+        <button
+          (click)="rechazarProduccion()"
+          class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-500 focus:ring-2 focus:ring-red-200 transition flex items-center justify-center"
+        >
+          <svg
+            class="h-4 w-4 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+          Rechazar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form with improved layout and feedback -->
+  <form [formGroup]="configForm" class="space-y-7">
+    <div class="relative">
+      <label class="block text-sm font-medium text-gray-700 mb-1"
+        >Bovino (ear-tag) <span class="text-red-500">*</span></label
+      >
+      <div class="relative">
+        <select
+          formControlName="bovine_id"
+          class="pl-10 mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-200 transition appearance-none"
+        >
+          <option value="" disabled>Selecciona un bovino</option>
+          <option *ngFor="let tag of earTags" [ngValue]="tag.bovine_id">
+            {{ tag.ear_tag }}
+          </option>
+        </select>
+        <div
+          class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+        >
+          <svg
+            class="h-5 w-5 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+            />
+          </svg>
+        </div>
+      </div>
+      <p
+        *ngIf="
+          configForm.get('bovine_id')?.invalid &&
+          configForm.get('bovine_id')?.touched
+        "
+        class="mt-1 text-sm text-red-600"
+      >
+        Por favor, selecciona un bovino
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div class="relative">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Grasa (%) <span class="text-red-500">*</span></label
+        >
+        <div class="relative">
+          <input
+            type="number"
+            step="0.1"
+            placeholder="Ej: 3.5"
+            formControlName="milk_fat"
+            class="pl-10 mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-200 transition"
+          />
+          <div
+            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+          >
+            <svg
+              class="h-5 w-5 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+          </div>
+        </div>
+        <p
+          *ngIf="
+            configForm.get('milk_fat')?.invalid &&
+            configForm.get('milk_fat')?.touched
+          "
+          class="mt-1 text-sm text-red-600"
+        >
+          Valor inválido
+        </p>
+      </div>
+
+      <div class="relative">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Proteína (%) <span class="text-red-500">*</span></label
+        >
+        <div class="relative">
+          <input
+            type="number"
+            step="0.1"
+            placeholder="Ej: 3.2"
+            formControlName="milk_protein"
+            class="pl-10 mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-200 transition"
+          />
+          <div
+            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+          >
+            <svg
+              class="h-5 w-5 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+          </div>
+        </div>
+        <p
+          *ngIf="
+            configForm.get('milk_protein')?.invalid &&
+            configForm.get('milk_protein')?.touched
+          "
+          class="mt-1 text-sm text-red-600"
+        >
+          Valor inválido
+        </p>
+      </div>
+    </div>
+
+    <div class="flex justify-end pt-4">
+      <button
+        type="button"
+        (click)="enviarConfiguracion()"
+        [disabled]="configForm.invalid"
+        class="inline-flex items-center px-6 py-3 bg-green-600 text-white font-semibold rounded-full shadow hover:bg-green-500 disabled:opacity-50 focus:ring-2 focus:ring-green-200 transition"
+      >
+        <svg
+          class="h-5 w-5 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+          />
+        </svg>
+        Enviar configuración
+      </button>
+    </div>
+  </form>
+
+  <!-- Lista de producciones de la jornada (ahora separada y debajo del formulario) -->
+  <div class="mt-10 border-t pt-6">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-lg font-semibold text-gray-800">
+        Producciones de la jornada
+      </h3>
+      <span
+        *ngIf="productions().length"
+        class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full"
+      >
+        {{ productions().length }} registros
+      </span>
+    </div>
+
+    <div
+      *ngIf="!productions().length"
+      class="flex flex-col items-center py-6 text-center text-gray-500"
+    >
+      <svg
+        class="h-12 w-12 mb-2 text-gray-300"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+        />
+      </svg>
+      <p>No hay producciones registradas</p>
+      <p class="text-sm">Las producciones confirmadas aparecerán aquí</p>
+    </div>
+
+    <div
+      *ngIf="productions().length"
+      class="overflow-hidden bg-white rounded-xl border border-gray-100 shadow-sm"
+    >
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th
+                scope="col"
+                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Bovino
+              </th>
+              <th
+                scope="col"
+                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Volumen
+              </th>
+              <th
+                scope="col"
+                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Hora
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-100">
+            <tr
+              *ngFor="let prod of productions()"
+              class="hover:bg-gray-50 transition duration-150"
+            >
+              <td
+                class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900"
+              >
+                #{{ prod.bovine_id }}
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                <span class="font-medium text-green-600">{{
+                  prod.milk_yield | number: '1.2-2'
+                }}</span>
+                L
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                {{ prod.milking_time | date: 'shortTime' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        *ngIf="productions().length > 5"
+        class="bg-gray-50 px-4 py-3 border-t border-gray-100 text-right"
+      >
+        <button
+          class="text-sm text-green-600 hover:text-green-700 font-medium"
+          (click)="verTodasLasProducciones()"
+        >
+          Ver historial completo
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

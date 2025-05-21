@@ -1,59 +1,139 @@
 # HatoverdeClient
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.4.
+Sistema de gestión integral para la industria ganadera lechera, desarrollado con [Angular](https://angular.dev/) versión 19.2.4.
 
-## Development server
+![Logotipo](/public/icons/cow-head.png)
 
-To start a local development server, run:
+## Descripción General
+
+HatoverdeClient es una aplicación web especializada para la gestión y monitoreo de la producción lechera y el manejo de bovinos. Esta plataforma permite a los productores registrar, visualizar y analizar datos de ordeñe, así como administrar información detallada de su ganado.
+
+## Características Principales
+
+- **Gestión Completa de Bovinos:**
+
+  - Registro de datos completos por animal
+  - Historial médico y eventos importantes
+  - Filtrado avanzado por diversos criterios (raza, arete, etc.)
+
+- **Monitoreo de Producción Lechera:**
+
+  - Seguimiento en tiempo real de la producción
+  - Estadísticas diarias y tendencias históricas
+  - Análisis de calidad (grasa, proteínas, etc.)
+
+- **Integración con ESP32:**
+
+  - Recepción de datos desde dispositivos de ordeño automático
+  - Configuración remota de equipos
+  - Alertas en tiempo real de anomalías
+
+- **Interfaz Moderna y Responsive:**
+  - Diseño adaptativo para dispositivos móviles y escritorio
+  - Experiencia fluida con Angular Standalone Components
+  - Interfaz intuitiva estilizada con Tailwind CSS
+
+## Servidor de Desarrollo
+
+Para iniciar el servidor local de desarrollo:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Una vez iniciado, navega a `http://localhost:4200/` en tu navegador. La aplicación se recargará automáticamente cuando modifiques cualquiera de los archivos fuente.
 
-## Code scaffolding
+## Estructura del Proyecto
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+La aplicación está organizada siguiendo una arquitectura por dominios:
 
-```bash
-ng generate component component-name
+```text
+src/app/domains/
+  ├── bovine/           # Gestión de bovinos
+  │   ├── components/
+  │   └── pages/        # Vistas principales de bovinos
+  ├── production/       # Producción lechera
+  │   └── pages/
+  │       └── production-esp32/  # Integración con dispositivos
+  └── shared/           # Componentes y servicios compartidos
+      ├── components/   # Modales y elementos de UI reutilizables
+      ├── models/       # Interfaces y tipos para la aplicación
+      └── services/     # Servicios para la comunicación con la API
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Generación de Código
+
+Angular CLI incluye herramientas para generar código. Para crear un nuevo componente:
+
+```bash
+ng generate component domains/[dominio]/components/nombre-componente
+```
+
+Para un listado completo de los elementos generables:
 
 ```bash
 ng generate --help
 ```
 
-## Building
+## Compilación del Proyecto
 
-To build the project run:
+Para compilar el proyecto para producción:
 
 ```bash
-ng build
+ng build --configuration production
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Los archivos compilados se almacenarán en el directorio `dist/`. Por defecto, la compilación para producción optimiza la aplicación para máximo rendimiento.
 
-## Running unit tests
+## Pruebas
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Pruebas Unitarias
+
+Para ejecutar las pruebas unitarias con [Karma](https://karma-runner.github.io):
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+### Pruebas E2E
 
-For end-to-end (e2e) testing, run:
+Para pruebas de extremo a extremo:
 
 ```bash
 ng e2e
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+> Nota: Angular CLI no incluye un framework de pruebas e2e por defecto. Puedes integrar Cypress, Playwright u otro según tus necesidades.
 
-## Additional Resources
+## Tecnologías Utilizadas
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Frontend:** Angular 19+, Tailwind CSS
+- **Autenticación:** JWT
+- **Comunicación API:** HttpClient
+- **Estado:** Signals
+- **Formularios:** Reactive Forms
+- **Integración IoT:** ESP32
+
+## Requisitos
+
+- Node.js 18.x o superior
+- NPM 10.x o superior
+- Angular CLI 19.x
+
+## Contribución
+
+1. Clona el repositorio
+2. Crea una rama para tu feature (`git checkout -b feature/amazing-feature`)
+3. Realiza tus cambios y haz commit (`git commit -m 'Add some amazing feature'`)
+4. Sube los cambios a tu rama (`git push origin feature/amazing-feature`)
+5. Abre un Pull Request
+
+## Recursos Adicionales
+
+- [Documentación de Angular](https://angular.dev/)
+- [Referencia de Angular CLI](https://angular.dev/tools/cli)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+
+---
+
+© 2025 Hatoverde. Todos los derechos reservados.

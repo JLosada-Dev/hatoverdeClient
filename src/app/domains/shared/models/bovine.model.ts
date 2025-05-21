@@ -26,3 +26,8 @@ export type CreateBovine = Omit<
   | 'events'
   | 'predictions'
 >;
+
+export interface EarTag {
+  bovine_id: number;
+  ear_tag: string;
+}

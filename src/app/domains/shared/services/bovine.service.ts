@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { CreateBovine, Bovine } from '@shared/models/bovine.model';
+import { CreateBovine, Bovine, EarTag } from '@shared/models/bovine.model';
 import { environment } from '../../../../environments/environment.development';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -30,5 +31,9 @@ export class BovineService {
       `${this.baseUrl}/${id}/toggle-active`,
       { is_active: isActive },
     );
+  }
+
+  listActiveEarTags(): Observable<EarTag[]> {
+    return this.http.get<EarTag[]>(`${this.baseUrl}/list-active-ear-tags`);
   }
 }

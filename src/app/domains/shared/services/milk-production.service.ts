@@ -47,13 +47,4 @@ export class MilkProductionService {
     const params = new HttpParams().set('date', date);
     return this.http.get<HourlyPoint[]>(url, { params });
   }
-
-  enviarConfigAlEsp32(data: {
-    bovine_id: number;
-    grasa: number;
-    proteina: number;
-  }) {
-    const esp32Url = 'http://192.168.1.12/config-bovino'; // Ajusta con IP real del ESP32
-    return this.http.post(esp32Url, data);
-  }
 }
