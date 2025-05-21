@@ -114,6 +114,74 @@ ng e2e
 - **Formularios:** Reactive Forms
 - **Integración IoT:** ESP32
 
+## Guía de Estilos y Diseño Visual
+
+La interfaz de HatoverdeClient sigue un sistema de diseño coherente utilizando Tailwind CSS para crear una experiencia visual moderna y profesional.
+
+### Paleta de Colores
+
+| Color            | Código HEX | Uso                                     |
+| ---------------- | ---------- | --------------------------------------- |
+| Verde Primario   | `#0f766e`  | Botones principales, acentos, marca     |
+| Verde Secundario | `#14b8a6`  | Elementos interactivos, datos positivos |
+| Gris Oscuro      | `#1e293b`  | Fondos de tarjetas, barras laterales    |
+| Azul Grisáceo    | `#334155`  | Contenedores, marcos, separadores       |
+| Blanco           | `#ffffff`  | Texto sobre fondos oscuros              |
+| Gris Claro       | `#f1f5f9`  | Fondos principales                      |
+| Rojo Alerta      | `#ef4444`  | Mensajes de error, alertas críticas     |
+| Amarillo Aviso   | `#eab308`  | Advertencias, notificaciones            |
+
+### Componentes UI Principales
+
+#### Tarjetas
+
+Las tarjetas son contenedores principales para información, utilizando:
+
+- Esquinas redondeadas (`rounded-xl`)
+- Sombras sutiles (`shadow-lg`)
+- Fondo oscuro para contraste (`bg-slate-800`)
+- Texto claro (`text-white`)
+- Espaciado interno consistente (`p-6`)
+
+#### Botones
+
+Los botones siguen un diseño consistente:
+
+- Botones primarios: `bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-6 rounded shadow`
+- Botones secundarios: `bg-slate-600 hover:bg-slate-700 text-white font-semibold py-2 px-4 rounded`
+- Botones de alerta: `bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded`
+
+#### Formularios
+
+Los campos de formulario tienen un estilo coherente:
+
+- Etiquetas: `text-sm font-medium text-gray-700 dark:text-gray-300`
+- Campos de entrada: `mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50`
+- Mensajes de error: `mt-1 text-sm text-red-600`
+
+### Iconografía y Elementos Visuales
+
+- **Iconos:** Utilizamos íconos SVG inline para optimización y consistencia visual
+- **Imágenes:** Placeholders consistentes para bovinos en `/public/img/bovine-placeholder.jpg`
+- **Logotipo:** Diseño de vaca en diferentes variantes (`/public/icons/cow-head.png`, `cow-color.png`, `vaca.png`)
+
+### Responsividad
+
+El diseño se adapta a diferentes tamaños de pantalla utilizando:
+
+- Clases responsive de Tailwind (sm, md, lg, xl, 2xl)
+- Layout flexible con Flexbox y Grid
+- Contenedores con anchos máximos para pantallas grandes
+- Menú adaptativo que se convierte en hamburguesa en dispositivos móviles
+
+### Animaciones
+
+Transiciones sutiles para mejorar la experiencia del usuario:
+
+- Hover en botones: `transition-colors`
+- Cambios de estado: `transition-opacity`
+- Modales: `transition-transform`
+
 ## Requisitos
 
 - Node.js 18.x o superior
@@ -133,6 +201,15 @@ ng e2e
 - [Documentación de Angular](https://angular.dev/)
 - [Referencia de Angular CLI](https://angular.dev/tools/cli)
 - [Tailwind CSS](https://tailwindcss.com/docs)
+- [Documentación de componentes UI](https://tailwindui.com/)
+
+## Capturas de pantalla
+
+![Dashboard](/public/img/screenshots/dashboard.png)
+![Gestión de Bovinos](/public/img/screenshots/bovine-management.png)
+![Módulo ESP32](/public/img/screenshots/esp32-module.png)
+
+> Nota: Las capturas de pantalla pueden no reflejar la versión más reciente de la interfaz.
 
 ---
 
