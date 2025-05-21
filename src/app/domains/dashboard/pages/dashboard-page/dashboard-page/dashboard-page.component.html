@@ -1,0 +1,160 @@
+<div class="min-h-screen bg-slate-900 py-8">
+  <div class="container mx-auto px-4 sm:px-8">
+    <!-- Loader -->
+    <div *ngIf="loading()" class="flex justify-center py-16">
+      <div
+        class="animate-spin rounded-full h-16 w-16 border-t-4 border-teal-500 border-solid"
+      ></div>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="error()" class="text-center text-red-400 py-4">
+      {{ error() }}
+    </div>
+
+    <!-- Grid principal del dashboard -->
+    <div
+      *ngIf="!loading() && !error()"
+      class="grid grid-cols-1 gap-8 lg:grid-cols-3"
+    >
+      <!-- Columna Izquierda: Estadísticas y Alertas -->
+      <div class="space-y-8 lg:col-span-1">
+        <!-- Tarjetas estadísticas principales -->
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Ejemplo: puedes reemplazar con <app-stats-card> -->
+          <div
+            class="bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col items-center"
+          >
+            <span class="text-3xl font-bold text-teal-400">
+              {{ genderCounts()?.total ?? '--' }}
+            </span>
+            <span class="text-lg text-gray-300 mt-2">Bovinos activos</span>
+          </div>
+          <div
+            class="bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col items-center"
+          >
+            <span class="text-3xl font-bold text-teal-400">
+              {{ milkSummary()?.total ?? '--' }} L
+            </span>
+            <span class="text-lg text-gray-300 mt-2">Leche producida hoy</span>
+          </div>
+          <div
+            class="bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col items-center"
+          >
+            <span class="text-3xl font-bold text-teal-400">
+              {{ milkSummary()?.average ?? '--' }} L
+            </span>
+            <span class="text-lg text-gray-300 mt-2">Promedio x bovino</span>
+          </div>
+          <div
+            class="bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col items-center"
+          >
+            <span class="text-3xl font-bold text-teal-400">
+              {{ genderCounts()?.males ?? 0 }}
+            </span>
+            <span class="text-sm text-gray-400">Machos</span>
+            <span class="text-3xl font-bold text-teal-400 mt-2">
+              {{ genderCounts()?.females ?? 0 }}
+            </span>
+            <span class="text-sm text-gray-400">Hembras</span>
+          </div>
+        </div>
+
+        <!-- Alertas de salud -->
+        <div class="bg-slate-800 rounded-xl shadow-lg p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-4">
+            Alertas de Salud
+          </h3>
+          <ng-container *ngIf="healthAlerts().length > 0; else noAlerts">
+            <ul class="divide-y divide-slate-700">
+              <li
+                *ngFor="let event of healthAlerts()"
+                class="py-2 text-sm text-gray-200"
+              >
+                <span class="font-medium text-teal-400">{{
+                  event.ear_tag
+                }}</span>
+                - {{ event.last_event.type }} ({{
+                  event.last_event.date | date: 'shortDate'
+                }})
+              </li>
+            </ul>
+          </ng-container>
+          <ng-template #noAlerts>
+            <p class="text-gray-400">Sin alertas recientes</p>
+          </ng-template>
+        </div>
+
+        <!-- Alertas reproductivas -->
+        <div class="bg-slate-800 rounded-xl shadow-lg p-6">
+          <h3 class="text-lg font-semibold text-fuchsia-400 mb-4">
+            Eventos Reproductivos
+          </h3>
+          <ng-container *ngIf="reproductiveEvents().length > 0; else noRepro">
+            <ul class="divide-y divide-slate-700">
+              <li
+                *ngFor="let event of reproductiveEvents()"
+                class="py-2 text-sm text-gray-200"
+              >
+                <span class="font-medium text-teal-400">{{
+                  event.ear_tag
+                }}</span>
+                - {{ event.last_event.type }} ({{
+                  event.last_event.date | date: 'shortDate'
+                }})
+              </li>
+            </ul>
+          </ng-container>
+          <ng-template #noRepro>
+            <p class="text-gray-400">Sin eventos recientes</p>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Columna Central: Gráfico de producción -->
+      <div class="lg:col-span-2 flex flex-col space-y-8">
+        <!-- Gráfico de producción mensual -->
+        <div
+          class="bg-slate-800 rounded-xl shadow-lg p-6 h-80 flex flex-col justify-center"
+        >
+          <app-milk-production-chart
+            [data]="monthlyProduction()"
+          ></app-milk-production-chart>
+          <div class="text-gray-400 text-center">
+            [Gráfico de producción mensual aquí]
+          </div>
+        </div>
+
+        <!-- Top productores del día -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div
+            class="bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col items-center"
+          >
+            <span class="text-2xl font-semibold text-lime-400"
+              >Mayor productor</span
+            >
+            <span class="text-xl text-teal-300 mt-2">
+              {{ topProducer()?.ear_tag ?? '--' }}
+            </span>
+            <span class="text-sm text-gray-400">
+              {{ topProducer()?.totalYield ?? '--' }} L
+            </span>
+          </div>
+          <div
+            class="bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col items-center"
+          >
+            <span class="text-2xl font-semibold text-rose-400"
+              >Menor productor</span
+            >
+            <span class="text-xl text-teal-300 mt-2">
+              {{ lowestProducer()?.ear_tag ?? '--' }}
+            </span>
+            <span class="text-sm text-gray-400">
+              {{ lowestProducer()?.totalYield ?? '--' }} L
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

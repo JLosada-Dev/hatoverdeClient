@@ -6,6 +6,7 @@ import {
   withPreloading,
 } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
+import { provideCharts } from 'ng2-charts';
 
 import { routes } from './app.routes';
 
@@ -18,5 +19,6 @@ export const appConfig: ApplicationConfig = {
       withPreloading(PreloadAllModules),
     ),
     provideHttpClient(),
+    provideCharts(),
   ],
 };

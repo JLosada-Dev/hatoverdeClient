@@ -38,6 +38,13 @@ export const routes: Routes = [
             './domains/production/pages/production-esp32/production-esp32.component'
           ),
       },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import(
+            './domains/dashboard/pages/dashboard-page/dashboard-page/dashboard-page.component'
+          ).then((m) => m.DashboardPageComponent),
+      },
     ],
   },
   {

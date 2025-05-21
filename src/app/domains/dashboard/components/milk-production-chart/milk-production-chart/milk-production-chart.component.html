@@ -1,0 +1,20 @@
+<canvas
+  baseChart
+  [data]="{
+    datasets: [{ data: chartData, label: 'Litros' }],
+    labels: chartLabels,
+  }"
+  [type]="'line'"
+  [options]="{
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: 'Producción mensual (L)' },
+    },
+    scales: {
+      x: { title: { display: true, text: 'Día' } },
+      y: { title: { display: true, text: 'Litros' }, beginAtZero: true },
+    },
+  }"
+  class="max-h-72 w-full"
+></canvas>
