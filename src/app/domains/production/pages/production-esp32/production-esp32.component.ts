@@ -21,7 +21,7 @@ import {
   Esp32Config,
 } from '@shared/models/esp32.model';
 import { EarTag } from '@shared/models/bovine.model';
-import { MilkProduction } from '@shared/models/milk-production.model';
+import { MilkProductionWithBovine } from '@shared/models/production.model';
 
 @Component({
   selector: 'app-production-esp32',
@@ -36,8 +36,8 @@ export default class ProductionEsp32Component implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
-  /** 1) Señal con todas las producciones recibidas por SSE */
-  productions = signal<MilkProduction[]>([]);
+  /** Producciones recibidas por SSE */
+  productions = signal<MilkProductionWithBovine[]>([]);
   private prodSource!: EventSource;
 
   configForm = this.fb.group({
@@ -55,24 +55,23 @@ export default class ProductionEsp32Component implements OnInit, OnDestroy {
   private errSource!: EventSource;
 
   ngOnInit() {
-    // 1) Ear tags
+    // Cargar bovinos activos
     this.bovineSvc.listActiveEarTags().subscribe({
       next: (list) => (this.earTags = list),
       error: (e) => console.error('EarTags load failed', e),
     });
 
-    // 2) SSE errores
+    // Escuchar errores SSE
     this.errSource = this.esp32.getEsp32ErrorStream();
     this.errSource.onmessage = (evt) =>
       this.lastError.set(JSON.parse(evt.data));
     this.errSource.onerror = (e) => {
       console.error('Error stream errores desconectado', e);
       this.errSource.close();
-      // Intentar reconectar después de 5 segundos
       setTimeout(() => this.reconnectErrorStream(), 5000);
     };
 
-    // 3) Polling pending-production
+    // Polling para producciones pendientes
     this.pollSub = interval(3000)
       .pipe(switchMap(() => this.esp32.getPendingProduction()))
       .subscribe({
@@ -80,23 +79,18 @@ export default class ProductionEsp32Component implements OnInit, OnDestroy {
         error: (e) => console.error('Pending failed', e),
       });
 
-    // 4) SSE producciones nuevas
+    // Escuchar producciones en tiempo real
     this.prodSource = this.esp32.getProductionStream();
     this.prodSource.onmessage = (evt) => {
-      const prod: MilkProduction = JSON.parse(evt.data);
+      const prod: MilkProductionWithBovine = JSON.parse(evt.data);
       this.productions.update((curr) => {
-        // Limitar a mostrar solo las últimas 20 producciones para mejor rendimiento
         const newList = [...curr, prod];
-        if (newList.length > 20) {
-          return newList.slice(-20);
-        }
-        return newList;
+        return newList.length > 20 ? newList.slice(-20) : newList;
       });
     };
     this.prodSource.onerror = (e) => {
       console.error('Error stream productions desconectado', e);
       this.prodSource.close();
-      // Intentar reconectar después de 5 segundos
       setTimeout(() => this.reconnectProductionStream(), 5000);
     };
   }
@@ -117,13 +111,10 @@ export default class ProductionEsp32Component implements OnInit, OnDestroy {
     console.log('Intentando reconectar al stream de producciones...');
     this.prodSource = this.esp32.getProductionStream();
     this.prodSource.onmessage = (evt) => {
-      const prod: MilkProduction = JSON.parse(evt.data);
+      const prod: MilkProductionWithBovine = JSON.parse(evt.data);
       this.productions.update((curr) => {
         const newList = [...curr, prod];
-        if (newList.length > 20) {
-          return newList.slice(-20);
-        }
-        return newList;
+        return newList.length > 20 ? newList.slice(-20) : newList;
       });
     };
     this.prodSource.onerror = (e) => {
@@ -181,7 +172,6 @@ export default class ProductionEsp32Component implements OnInit, OnDestroy {
     this.esp32.clearPending().subscribe(() => this.pending.set(null));
   }
 
-  // Nueva función para ver todas las producciones
   verTodasLasProducciones() {
     this.router.navigate(['/producciones']);
   }

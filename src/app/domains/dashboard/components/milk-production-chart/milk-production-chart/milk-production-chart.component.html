@@ -1,20 +1,53 @@
 <canvas
   baseChart
   [data]="{
-    datasets: [{ data: chartData, label: 'Litros' }],
+    datasets: [
+      {
+        data: chartData,
+        label: 'Litros',
+        tension: 0.4,
+        borderColor: '#22c55e',
+        backgroundColor: 'rgba(34, 197, 94, 0.2)',
+        pointBackgroundColor: '#16a34a',
+        fill: true,
+      },
+    ],
     labels: chartLabels,
   }"
   [type]="'line'"
   [options]="{
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
-      title: { display: true, text: 'Producción mensual (L)' },
+      title: {
+        display: true,
+        text: 'Producción mensual (L)',
+        color: '#15803d',
+        font: { size: 16 },
+      },
     },
     scales: {
-      x: { title: { display: true, text: 'Día' } },
-      y: { title: { display: true, text: 'Litros' }, beginAtZero: true },
+      x: {
+        title: {
+          display: true,
+          text: 'Fecha',
+          color: '#4b5563',
+        },
+        ticks: { color: '#4b5563' },
+        grid: { color: '#e5e7eb' },
+      },
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Litros',
+          color: '#4b5563',
+        },
+        ticks: { color: '#4b5563' },
+        grid: { color: '#e5e7eb' },
+      },
     },
   }"
-  class="max-h-72 w-full"
+  class="w-full h-64"
 ></canvas>

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { DashboardService } from '@shared/services/dashboard.service';
 import {
   GenderCounts,
@@ -19,12 +19,11 @@ import { firstValueFrom } from 'rxjs';
   imports: [
     CommonModule,
     MilkProductionChartComponent,
-    // Aquí irán los componentes secundarios una vez creados
-    // StatsCardComponent, BovineStatsComponent, etc.
+    // Aquí puedes agregar más componentes (StatsCard, AlertBox, etc.)
   ],
 })
 export class DashboardPageComponent implements OnInit {
-  // Signals para estado reactivo
+  // Estado reactivo
   genderCounts = signal<GenderCounts | null>(null);
   milkSummary = signal<MilkSummary | null>(null);
   topProducer = signal<Producer | null>(null);
@@ -37,6 +36,31 @@ export class DashboardPageComponent implements OnInit {
   loading = signal(true);
   error = signal<string | null>(null);
 
+  // Computado para mostrar tarjetas estadísticas
+  readonly stats = computed(() => {
+    const g = this.genderCounts();
+    const m = this.milkSummary();
+
+    return [
+      {
+        label: 'Bovinos activos',
+        value: g?.total ?? '--',
+      },
+      {
+        label: 'Leche producida hoy',
+        value: m?.total ? `${m.total.toFixed(1)} L` : '--',
+      },
+      {
+        label: 'Promedio por bovino',
+        value: m?.average ? `${m.average.toFixed(1)} L` : '--',
+      },
+      {
+        label: 'Machos / Hembras',
+        value: g ? `${g.males ?? 0} / ${g.females ?? 0}` : '--',
+      },
+    ];
+  });
+
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
@@ -44,7 +68,6 @@ export class DashboardPageComponent implements OnInit {
   }
 
   loadDashboardData() {
-    // Para ejemplo: la fecha actual (puedes ajustar zona horaria según necesidad)
     const today = new Date().toISOString().split('T')[0];
     const now = new Date();
     const year = now.getFullYear();
@@ -53,7 +76,6 @@ export class DashboardPageComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    // Llamadas paralelas a los endpoints necesarios usando firstValueFrom
     Promise.all([
       firstValueFrom(this.dashboardService.getGenderCounts()),
       firstValueFrom(this.dashboardService.getDailySummary(today)),
@@ -85,9 +107,7 @@ export class DashboardPageComponent implements OnInit {
       )
       .catch((err) => {
         this.error.set('Error cargando el dashboard');
-        // Puedes mostrar detalles de error si lo deseas
         console.error('Error cargando el dashboard:', err);
-        // Aquí podrías manejar el error de forma más específica
       })
       .finally(() => this.loading.set(false));
   }
